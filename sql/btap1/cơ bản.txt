@@ -1,0 +1,33 @@
+create table KhachHang(
+MaKH nvarchar(10) primarykey,
+Hoten nvarchar(50),
+SDT nchar(20),
+DiaChi nvarchar(100)
+);
+create table NhaChoThue(
+MaN nvarchar(10) primarykey,
+ChuNha nvarchar(50),
+Gia interger,
+DiaChi nvarchar(100)
+);
+create table HopDong(
+MaKH nvarchar(10),
+MaN nvarchar(10),
+NgayBatDau smalldatetime,
+NgayKetThuc smalldatetime
+foreign key (MaKH ) references KhachHang(MaKH),
+foreign key (MaN ) references NhaChoThue(MaN)
+);
+a.Select ChuNha, Gia, DiaChi
+  from NhaChoThue
+  where Gia < 10000000;
+b. select MaKH, HoTen, DiaChi
+   from HopDong as A inner join KhachHang as B on A.MaKH = B.MakH inner join NhaChoThue as C on C.MaN = A.MaN
+   where ChuNha = 'Nông văn dền' and NgayKetThuc < getdate()
+c. select * from NhaChoThue
+   where MaN in(Select MaN From HopDong Where GETDATE() > NgayKetThuc)
+d. Select Max(Gia) From NhaChoThue as A, HopDong as B Where A.MaN = B.MaN
+
+
+
+

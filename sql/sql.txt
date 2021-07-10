@@ -1,0 +1,145 @@
+drop database if exists `shopese-thien`;
+create database `shopese-thien`;
+use `shopese-thien`;
+
+drop table if exists `account`;
+create table `account`(
+`username` nvarchar(100) primary key,
+`password` nvarchar(100) not null,
+`role` enum('ADMIN','STAFF','USER'), -- enumerator 
+`display` nvarchar(100),
+`email` nvarchar(100),
+`phone` nvarchar(100),
+`address` nvarchar(100),
+`birthday` date,
+`avatar` nvarchar(100),
+`status` nvarchar(100) default 'ACTIVE',
+`created_at` timestamp default current_timestamp,
+`updated_at` timestamp default current_timestamp on update current_timestamp
+);
+
+drop table if exists `category`;
+create table `category`(
+`categoryId` nvarchar(100) primary key,
+`display` nvarchar(100),
+`description` nvarchar(100),
+`imageUrl` nvarchar(100)
+);
+
+drop table if exists `product`;
+create table `product`(
+`productId` nvarchar(100) primary key,
+`display` nvarchar(100),
+`provider` nvarchar(100),
+`description` nvarchar(100),
+`imageUrl` nvarchar(100),
+`priceIn` integer,
+`priceOut` integer,
+`priceSale` integer,
+`shipday` integer,
+`instock` integer,
+`status` nvarchar(100),
+`categoryId` nvarchar(100),
+foreign key (`categoryId`) references `category`(`categoryId`),
+`created_at` timestamp default current_timestamp,
+`updated_at` timestamp default current_timestamp on update current_timestamp
+);
+
+drop table if exists `order`;
+create table `order`(
+`orderId` nvarchar(100) primary key,
+`username` nvarchar(100),
+`productId` nvarchar(100),
+`price` integer,
+foreign key (`productId`) references `product`(`productId`),
+foreign key (`username`) references `account`(`username`),
+`amount` integer,
+`note` nvarchar(100),
+`status` nvarchar(100),
+`created_at` timestamp default current_timestamp,
+`updated_at` timestamp default current_timestamp on update current_timestamp
+);
+
+select * from `account`;
+select * from `category`;
+select * from `product`;
+select * from `order`;
+
+
+-- liệt kê tất cả danh sách product
+select * from `product`;
+ 
+-- liệt kê tất cả danh sách account có role STAFF 
+select `username`,`password`,`role`
+from`account`
+where `role` = 'STAFF';
+
+-- liệt kê tất cả danh sách order 
+select * from `order`;
+
+-- liệt kê tất cả danh sách order của người dùng 'xxx' 
+select `orderID`,`username`
+from`order`
+where `username` = 'xxx'
+
+-- thống kê lãi - lỗ của các order
+-- thống kê lãi - lỗ của các order của user 'xxx'
+-- thống kê lãi - lỗ của các order của loại mặt hàng 'xxx'
+-- thống kê lãi - lỗ của các order của user 'xxx' đối với loại mặt hàng 'xxx'
+
+--liệt kê đơn hàng user có sđt 0123
+select `orderID`,`order`.`username`
+from `order`, `account`
+where `order`.`username`=`account`.`username` and `number` like '0123%'
+
+-- liệt kê tất cả danh sách category
+select * from `category`;
+
+-- hiển thị các mặt hàng theo category 'xxx'
+select `display`,`categoryId`
+from `category`
+where `display` = 'xxx';
+
+-- hiển thị các mặt hàng theo category 'xxx' hoặc 'yyy'
+select `display`,`categoryId`
+from `category`
+where `display` = 'xxx' or `display` = 'yyy';
+
+-- hiện thị đơn hàng mà người dùng có sđt 0123 đã mua
+select sum(price), 
+from order, account
+where order.username = account.username
+and account.usename = '0123'
+--hiển thị các đơn hàng của mặt hàng 'Máy tính' hoặc 'Điện thoại' có giá tiền >1.000.000 mua bởi người dùng 'chuhieu'
+(select orderID
+form order as O inner join product as P on P.productID = O.productID inner join account as A on A.username = O.username
+where username = 'chuhieu' and price > 1.000.000 and P.display = 'Máy tính')
+union
+(select orderID
+form order as O inner join product as P on P.productID = O.productID inner join account as A on A.username = O.username
+where username = 'chuhieu' and price > 1.000.000 and P.display = 'Điện thoại')
+
+select orderID
+form order as O inner join product as P on P.productID = O.productID inner join account as A on A.username = O.username
+where username = 'chuhieu' and price > 1.000.000 and 
+( select orderID
+form order as I inner join product as L on I.productID = L.productID inner join account as B on B.username = I.username
+where display = 'Máy tính' or display = 'Điện thoại')
+ 
+-- tạo mới product
+-- tạo mới order
+-- tạo mới user 
+
+-- cập nhập số lượng hàng trong kho của mặt hàng xxx
+-- cập nhập đơn hàng xxx thành trạng thái đã ship
+-- cập nhập tất cả thông tin của user 
+
+-- pagination 
+-- filter
+-- search 
+-- sort by sys_config
+
+select * from `account` ;
+select * from `category` ;
+select * from `product` ;
+select * from `order` ;

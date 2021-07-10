@@ -1,0 +1,74 @@
+create database HoangNhat;
+use HoangNhat;
+drop table if exists product;
+create table product(
+ ProductId nvarchar(10) primary key,
+ name nvarchar(50),
+ price int,
+ provider nvarchar (50),
+ category nvarchar(10),
+ salePercent float,
+ salePrice int,
+ imageURL nvarchar(10)
+ );
+ 
+ insert into product values ('1125', 'samsung A50', 4900000, 'SamSung', 'Phone', null, null, '..\A50.png');
+ insert into product values ('1215', 'samsung J7 Pro', 7900000, 'SamSung', 'Phone', null, null, '..\J7.png');
+ insert into product values ('5214', 'Iphone X', 19900000, 'Apple', 'Phone', null, null, '..\X.png');
+ insert into product values ('1666', 'Mac', 29900000, 'Apple', 'Lapton', null, null, '..\mac.png');
+ update product set price = 7900000 where ProductID = '1215'; 
+ delete from product where category = 'SamSung' and price = 4900000;
+
+create table user(
+ userID nvarchar(10) primary key,
+ email nvarchar(100),
+ phone nvarchar(100),
+ useName nvarchar(100),
+ password nvarchar(100),
+ birthday date,
+ status int,
+ avatar nvarchar(100),
+ `role` int
+);
+insert into user values ('1111', 'ngocnhathht@gmail.com', 0946550089,'HoangNhat' , '621999', '6/2/1999', null, '..\ava1.png',null);
+insert into user values ('1512', 'ngocnhathhy@gmail.com', 0965411301,'HoangNhat1' , '621559', '6/8/1999', null, '..\ava2.png',null);
+insert into user values ('1511', 'ngocnhathhm@gmail.com', 0946555142,'HoangNhat2' , 'nhathht', '8/2/1999', null, '..\ava3.png',null);
+update user set password = 'nhathht' where userID = '1511'; 
+delete from user where userID = '1111';
+
+create table `order`(
+  orderID nvarchar(10) primary key,
+  userID nvarchar(10),
+  ship int,
+  `status` nvarchar(100)
+);
+insert into `order` 
+values ('1211', 
+		'1111', 
+        5218000,
+        '162 Hoang van thai
+        0946550089' );
+insert into `order` values ('1522', '1250', 10000000,'52 Nguyen Xien 0946512589' );
+insert into `order` values ('5211', '5512', 50000000,'52 le lai 0946550125' );
+update  `order` set `status` = 'DH Bach Khoa 0946550089' where userID = '1111'; 
+delete from  `order` where userID = '1111';
+
+ create table oderDetail (
+  orderId nvarchar(10) ,
+  productID nvarchar(10),
+  quantity int,
+  price int 
+ );
+insert into oderDetail values ('1522', '1125',2,10000000 );
+insert into oderDetail values ('5211', '5514', 14,100000000 );
+update oderDetail set price = 50500000 where orderID = '5211'; 
+delete from oderDetail where orderID = '1522';
+ create table category (
+  categoryID nvarchar(10) primary key,
+  imageURL nvarchar(10),
+  name nvarchar(10)
+ );
+insert into category values ('1', '.../SamSung.png','SamSung' );
+insert into category values ('11', '.../Iphone.png','Iphone' );
+update category set imageURL = '.../Iphone1.png' where  categoryID = '11'; 
+delete from category where categoryID = '5';

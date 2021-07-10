@@ -1,0 +1,39 @@
+create table KhachSan(
+MaKS nvarchar(10) primarykey,
+TenKS nvarchar(50),
+DiaChi nvarchar(100)
+);
+create table Phong(
+MaKS nvarchar(10),
+SoP nvarchar(10)primarykey,
+LoaiP nvarchar(10),
+Gia interger
+foreign key (MaKS) references KhachSan(MaKS)
+);
+create table DatPhong(
+MaKS nvarchar(10),
+MaKhach nvarchar(10),
+NgayNhan smalldatetime primarykey,
+NgayTra smalldatetime,
+SoP nvarchar(10),
+foreign key (MaKS) references KhachSan(MaKS),
+foreign key (MaKhach) references KhachSan(MaKhach)
+);
+create table Khach(
+MaKhach nvarchar(10) primarykey,
+Ten nvarchar(50),
+DiaChi nvarchar(100)
+);
+a.select Gia, LoaiP
+  from Phong as A inner join KhachSan as B on A.MaKS = B.MaKS
+  where TenKS = 'Melia'
+b.select B.Ten, B.Diachi from DatPhong as A , Khach as B, KhachSan as C
+  where A.MaKhach = B. MaKhach and A.MaKS = C.MaKS and TenKS = 'Melia'
+c.(select A.SoP, A.loaiP,B.Ten, SoP from Khach as B, Phong.A, KhachSan
+  where TenKS = 'Melia') uninon
+  (select B.Ten ,SoP from DatPhong as A , Khach as B, KhachSan as C, Phong as D
+  where A.MaKhach = B. MaKhach and A.MaKS = C.MaKS and TenKS = 'Melia' and D.MaKS = C.MaKS )
+d. select A.SoP from Phong as A 
+   where SoP not in ( select SoP from DatPhong as B, Phong as A where B.SoP = A.SoP )
+e. select count(SoP) from Phong as A, KhachSan as B where A.MaKS = B.MaKS and B.DiaChi like '%LonDon'
+f. update Phong set Gia = 1.05* Gia where LoaiP = 'Don'
